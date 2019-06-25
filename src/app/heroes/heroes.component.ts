@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {Hero} from "../models/hero";
 import {HeroService} from "../services/hero.service";
 import {Observable, of} from "rxjs";
-import {HEROES} from "../mocks/mock-heroes";
 
 @Component({
   selector: 'app-heroes',
@@ -25,5 +24,19 @@ export class HeroesComponent implements OnInit {
       .subscribe(heroes => {
         this.heroes = heroes;
       });
+  }
+
+  add(name: string) {
+    name = name.trim();
+    if(!name) return;
+    this.heroService.addHero({ name } as Hero)
+      .subscribe(hero=> {
+        this.heroes.push(hero);
+      })
+  }
+
+  delete(hero: Hero): void {
+    this.heroes = this.heroes.filter(h => h !== hero);
+    this.heroService.deleteHero(hero).subscribe();
   }
 }
